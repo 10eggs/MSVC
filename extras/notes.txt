@@ -1,0 +1,79 @@
+const post = {};
+let title = 'Title';
+let content = 'Contet'
+post[1]={title,content};
+
+//Result:
+// {title: 'Title', content: 'Contet'}
+const obj = {
+    'prop1': '123',
+        'prop2': '123'
+    };
+    
+
+
+// #### CREATING AND RUNNING A CONTAINER FROM AN IMAGE ####
+// #### overwriting default docker command
+
+// ####ALL RUNNING CONTAINERS### $docker ps 
+// ####HISTORY OF RUNS#### $docker ps --all
+// ####docker run ${imagename} {command}
+// ####docker run busybox echo hi there
+
+// ####docker run = docker create + docker start
+
+// docker creat hello-world {return guid}
+// docker start -a <paste guid>
+// $-a  === watch docker and print output to the console
+
+//We can run again container with status 'exited'
+//
+//docker system prune 
+
+//docker logs - get information from the container, get all logs emmited by this container
+
+//docker stop <container id> ==> hardware signal is going to the process SIGTERM
+
+//docker kill <container id> ==> SIGKILL
+
+//docker exec -- execute an additional command in a container
+//docker exec -it -- allows us to provide input to the container
+//docker exec -it <container id> <command i.e. redis-cli>
+
+//Every container has 3 communication channels attached to it - STDIN STDOUT STDERR
+//Open shell in context of your running container
+
+//docker exec -it <guid> sh    <--- run container
+//sh - command processor, shell
+
+
+//***********CREATE IMAGE****************//
+//1.Dockerfile
+//2. Docker client(docker cli)
+//3. Docker server creates an image
+
+
+//1. Base image
+//2. Run some commands to install additional programs
+//3. Specify a command to run on container startup
+
+
+//TO ADD TAG:
+//1. dockerid/reponame:version
+
+
+//CREATE AN IMAGE BASED ON CONTAINER
+//1. Run container: $docker run -it alpine sh
+//2. Manually install redis: $apk --update redis
+//3. We've changed file system. Assign default command to it through docker cli
+//4. $docker commit -c "CMD 'redis-server'"  CONTAINERID
+//5. -c => default command
+
+
+//PLANNED ERRORS
+//PORT FORWARDING - CONTAINER PORT CANNOT BE ACCESSED DIRECTLY, IT HAS TO BE FORWARDER THROUGH THE CONTAINER
+//It is a runtime constains, so port configuration is done along with 'RUN' command
+
+//docker run -p 8080[INCOMING REQUEST TO THE LOCALHOST] : 8080 [PORT SPECIFIED INSIDE THE CONTAINER] <IMG ID>
+
+//
