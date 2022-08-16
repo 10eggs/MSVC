@@ -11,56 +11,162 @@ const obj = {
     };
     
 
+1. docker run hello-world
 
-// #### CREATING AND RUNNING A CONTAINER FROM AN IMAGE ####
-// #### overwriting default docker command
+Client is contacting Docker Deamon, and docker Deamon is reaching the docker server.
+~~Question - what is the Docker Deamon?
 
-// ####ALL RUNNING CONTAINERS### $docker ps 
-// ####HISTORY OF RUNS#### $docker ps --all
-// ####docker run ${imagename} {command}
-// ####docker run busybox echo hi there
+Docker server is checking if image is actually in a 'Image cache' on local machine
+If empty - reach Docker Hub (free repo)
 
-// ####docker run = docker create + docker start
+Container is an instance of Image
 
-// docker creat hello-world {return guid}
-// docker start -a <paste guid>
-// $-a  === watch docker and print output to the console
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-//We can run again container with status 'exited'
-//
-//docker system prune 
+2. What the container is?
+Brief explanation of OS - Kernel, CPU, Memory, Hard Disk
+Kernel - running software process
 
-//docker logs - get information from the container, get all logs emmited by this container
-
-//docker stop <container id> ==> hardware signal is going to the process SIGTERM
-
-//docker kill <container id> ==> SIGKILL
-
-//docker exec -- execute an additional command in a container
-//docker exec -it -- allows us to provide input to the container
-//docker exec -it <container id> <command i.e. redis-cli>
-
-//Every container has 3 communication channels attached to it - STDIN STDOUT STDERR
-//Open shell in context of your running container
-
-//docker exec -it <guid> sh    <--- run container
-//sh - command processor, shell
+If we'd like to save a file from Node.js to the hardrive, this operation happens through the Kernel
+Processess running on our computers (e.g Chrome Spoti Node) interact with Kernel through System Calls
 
 
-//***********CREATE IMAGE****************//
-//1.Dockerfile
+Namespacing - this is the feature served by OS, which allows you to segment portions of those resources
+If we using namespacing, then Kernel needs to know which process is making the system call - based on that information it can select accurate segment of HD
+
+Control Groups - Limit amount of resources used per process
+We can control for example Memory, CPU Usage, HD I/O, Network Bandwith
+
+CONTAINER - process or set of processes that have a grouping of resources specifically assigned to it
+
+Image - Snapshot of files and Startup Command
+What happens when image is turned into container?
+First off, the kernel is going to isolate a little section of the harddrive and make it available to just this container.
+image is taken and placed into that little segment of the hard drive.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+3. When we are running Docker we are just running the Linux VMs on our computers, as Namespacing and Control Groups are used by Linux, not VM or MacOS either
+ 
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 4. Docker CLI:
+#CREATING AND RUNNING A CONTAINER FROM AN IMAGE + overwriting default docker command
+$docker run {imagename} {command}
+
+#We may run these two commands as these commands exist inside busybox fs snapshot. We can't execute them from hello-world container
+$docker run busybox ls
+$docker run busybox echo hi there
+
+
+#ALL RUNNING CONTAINERS
+$docker ps 
+
+#HISTORY OF RUNS
+$docker ps --all
+
+LIFECYCLE OF THE CONTAINER
+docker run = docker create + docker start
+
+#Create Container
+$docker creat hello-world {return guid}
+
+#Start Container
+$docker start -a <paste guid>
+
+$-a  === watch docker output from the container and print output to the console
+
+#We can run again container with status 'exited'
+#Let's say we've run our docker container like the following:
+$docker run busybox echo hello there
+#also $docker run -it busybox sh
+#This container has status 'exited'.
+#However, we can run it again, by using
+$docker start -a <guid>
+#As an output, we will receieve 'hello there' again, as this is the process which has been invoked with a container
+
+#This delete all docker history - exited, and also docker catche
+$docker system prune 
+
+#get information from the container, get all logs emmited by this container
+$docker logs
+
+#hardware signal is going to the process SIGTERM. Stop gives you a bit of time, cleanup etc. Kill shut it down immidiately
+$docker stop <container id> ==> SIGTERM
+$docker kill <container id> ==> SIGKILL
+
+#Run command inside the container 
+# -it flag allow us to put input to the container
+$docker exec -- execute an additional command in a container
+$docker exec -it -- allows us to provide input to the container
+$docker exec -it <container id> <command i.e. redis-cli>
+
+#Every container(every linux process) has 3 communication channels attached to it - STDIN STDOUT STDERR
+#-i flag allow us to attach our terminal to STDIN proces inside our container
+#-t formatted manner
+
+#Open shell in context of your running container
+$docker exec -it <guid> sh    <--- run container
+$sh - command processor, shell
+$ctrl+d || exit = exit
+
+
+#Container isolation
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+***CREATE IMAGE***
+//1. Dockerfile
 //2. Docker client(docker cli)
 //3. Docker server creates an image
 
+Creating a Dockerfile:
+1. Base image
+2. Run some commands to install additional programs
+3. Specify a command to run on container startup
 
-//1. Base image
-//2. Run some commands to install additional programs
-//3. Specify a command to run on container startup
+#After image created
+#Take docker file and create img out of cli
+$docker build .
+
+#Next
+$docker run <id_from_docker_build>
+
+
+#Analogy for creating Dockerfile
+#We are using Alpine, which is linux distribution
+#Alpine img as any other img has snapshot of file structure and startup command
+
+#This has nothing to do with docker - it is apache package something, which is apache package manager which allow us to upload redis from 
+$FROM alpine
+
+
+#Look back at the previous step (base img). Take this img and create container based on it. Next, run RUN apk~~ inside container (primary running process)
+$RUN apk add --update redis 
+$CMD ["redis-server"]
+
+
+#RECAP
+#1. Install alpine as a base image
+#2. Run command in temporarly created container based on alpine img
+#3. Container with new FS (with redis) there - take snapshot of it, and shut down container
+#4. Get copied snapshot
+#5. CMD says - well, if you'll ever need to run this container I'd like you to run this first CMD first
+#6. In result we've got container with modified primary command
+#7. Shut it down, take a pic
+#8. Output of DOCKERFILE is the last img generated in file
+
+
 
 
 //TO ADD TAG:
 //1. dockerid/reponame:version
+$docker build -t stephengrinder/redis:latest .
 
+//2. After this all you need to do is run
+$docker run stephengrinder/redis
+ 
+#########582 lesson
 
 //CREATE AN IMAGE BASED ON CONTAINER
 //1. Run container: $docker run -it alpine sh
@@ -76,4 +182,6 @@ const obj = {
 
 //docker run -p 8080[INCOMING REQUEST TO THE LOCALHOST] : 8080 [PORT SPECIFIED INSIDE THE CONTAINER] <IMG ID>
 
-//
+#Kubernetess Cluster - set of VMs - VM is Node
+#All managed by MASTER
+
