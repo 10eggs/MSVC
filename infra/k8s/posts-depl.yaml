@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posts-depl
+spec:
+  #Number of pods that we want to create running some particular image
+  replicas: 1
+  #Take a look at all the different pods that have been created
+  selector:
+    matchLabels:
+      #Find all the pods with a label of app posts
+      app: posts
+  #Exact configuraiton of Pod
+  #This config is applied to pod which is made by Deployment object
+  #Pod with label eq 'posts'
+  template:
+    metadata:
+      labels:
+        app: posts
+    spec:
+      containers:
+        - name: posts
+          image: 10eggs/posts:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-clusterip-srv
+spec:
+  #What pod it is going to access to, which is 'event-bus' from template/meta/label/app
+  selector:
+    app: posts
+  ports:
+    - name: posts
+      protocol: TCP
+      port: 4000
+      targetPort: 4000
+
+

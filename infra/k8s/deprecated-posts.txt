@@ -1,0 +1,15 @@
+#Extensible - Look at the default V1 Kubernetes list of objects that have a default list of objects that can be created
+apiVersion: v1
+
+#Pod - wrap a container
+kind: Pod
+
+#Different options for object we are going to create
+metadata:
+  name: posts
+#Definition that controls exactly what should be going on inside this pod
+spec:
+  containers:
+  # '-' means array
+    - name: posts
+      image: 10eggs/posts:0.0.1
