@@ -185,3 +185,71 @@ $docker run stephengrinder/redis
 #Kubernetess Cluster - set of VMs - VM is Node
 #All managed by MASTER
 
+#REMINDER FOR DOCKER commands
+#docker build -t 10eggs/posts
+
+~~~~~~~~~~~~~~~~~~~~~~~~K8S~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#Node - VM
+#Pod - container
+#Service - Run container in cluster - handling networking.
+#It abstracts away all the difficulties of trying to figure out what ip or what port some given program is running on
+
+$ctrl+` - focus on terminal
+$ctrl+1 - focus window
+
+
+#####LIST OF K8s world
+#Run first pod:
+$kubectl apply -f posts.yaml
+$kubectl get pods
+$kubectl exec -it [pod_name][cmd]
+$kubectl logs [pod_name]
+$kubectl delete pod [pod_name]
+$kubectl describe pod [pod_name]
+
+#Deployment - if pod dissapear - recreate, it manages set of pods
+#If updated version of pod is ready, then deployment object carry on all replacement tasks
+
+#To Create Deployment
+$kubectl apply -f posts-depl.yaml
+
+#To Check Deployments
+$kubectl get deployments
+
+#Updating the Image Used by a Deployment
+#Method 1
+1. Make change to project code,
+2. Rebuid the image, specifying a new image version,
+3. In the deployment config file, update the version of the image
+4. Run the command kubectl apply -f [depl file name]
+#Kube knows what was changed - if deployment already exist, you'll see 'configured' inormation rather than 'created'
+
+
+#Method 2
+1. The deployment must be using the 'latest' tag in the pon spec section
+2. Make an update to your code
+3. Build the image
+4. Push the image to docker Hub
+5. Run the command kubectl rollout restart deployment [depl_name]
+#Kube says restarted
+
+
+#NETWORKING WITH SERVICES(services as an objects in kubectl)
+#4 different types
+#Cluster IP - in the cluster
+#Node Port - outside cluster, usually for dev purposes
+#Load Balancer - outside cluster, prod purpose
+#External Name - (out of scope)
+
+
+#NodePorts - port,targetport(pod port),nodePort (node port)
+#When posts-srv is created, we need to apply it to kubectl
+
+#U can create separate yaml for ClusterIP or just colocate with depl yaml
+
+#For services ClusterIP is deafult service name, that's why we can skip it when we are doing our job
+#We are separating different objects by putting '---' in yaml
+
+
+#When we've got services for our pods we'll need to change url from localhost to name of our ClusterIP services, e.g. 'posts-clusterip-srv'
+#
