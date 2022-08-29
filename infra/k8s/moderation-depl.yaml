@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moderation-depl
+spec:
+  #Number of pods that we want to create running some particular image
+  replicas: 1
+  #Take a look at all the different pods that have been created
+  selector:
+    matchLabels:
+      #Find all the pods with a label of app moderation
+      app: moderation
+  #Exact configuraiton of Pod
+  #This config is applied to pod which is made by Deployment object
+  #Pod with label eq 'moderation'
+  template:
+    metadata:
+      labels:
+        app: moderation
+    spec:
+      containers:
+        - name: moderation
+          image: 10eggs/moderation:latest
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: moderation-srv
+spec:
+  #What pod it is going to access to, which is 'moderation' from template/meta/label/app
+  selector:
+    app: moderation
+  ports:
+    - name: moderation
+      protocol: TCP
+      port: 4003
+      targetPort: 4003

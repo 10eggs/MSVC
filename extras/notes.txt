@@ -252,4 +252,21 @@ $kubectl get deployments
 
 
 #When we've got services for our pods we'll need to change url from localhost to name of our ClusterIP services, e.g. 'posts-clusterip-srv'
-#
+
+
+#TO APPLY MULTIPLE CONFIG FILES BY ONCE:
+$kubectl apply -f . 
+
+
+kubectl delete svc comment-srv
+
+#Start with React application
+#LET's GO WITH LOAD BALANCER
+
+#LBS - tells Kubernetes to reach out to it's PROVIDER and PROVISION a load balancer. Gets traffic in to a single pod
+#LBS has different behavior than pods,services,deployments - it is going to tell our cluster to reach out to its Cloud Provider.
+#It is asking Cloud Provider to provide Load Balancer for us
+
+ 
+#Ingress - a pod with a set of routing rules to distribute traffic to other services. Ingress Controller is feed by config file
+#Need to trick our machine that posts.com = localhost. Whenever we want to access posts.com - we'll be always redirected to localhost

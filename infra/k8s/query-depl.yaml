@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: query-depl
+spec:
+  #Number of pods that we want to create running some particular image
+  replicas: 1
+  #Take a look at all the different pods that have been created
+  selector:
+    matchLabels:
+      #Find all the pods with a label of app query
+      app: query
+  #Exact configuraiton of Pod
+  #This config is applied to pod which is made by Deployment object
+  #Pod with label eq 'query'
+  template:
+    metadata:
+      labels:
+        app: query
+    spec:
+      containers:
+        - name: query
+          image: 10eggs/query:latest
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: query-srv
+spec:
+  #What pod it is going to access to, which is 'query' from template/meta/label/app
+  selector:
+    app: query
+  ports:
+    - name: query
+      protocol: TCP
+      port: 4002
+      targetPort: 4002
