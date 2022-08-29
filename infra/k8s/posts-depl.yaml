@@ -27,7 +27,7 @@ kind: Service
 metadata:
   name: posts-clusterip-srv
 spec:
-  #What pod it is going to access to, which is 'event-bus' from template/meta/label/app
+  #What pod it is going to access to, which is 'posts' from template/meta/label/app
   selector:
     app: posts
   ports:
