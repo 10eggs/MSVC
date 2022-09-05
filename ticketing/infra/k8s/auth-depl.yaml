@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  replicas: 1
+  #Tell the DEPLOYMENT object How to FIND all pods is going to create
+  selector: 
+    matchLabels:
+      app: auth
+  #Tell the DEPLOYMENT object how to CREATE all pods
+  template:
+    metadata:
+      labels:
+        app: auth
+    #How to behave
+    spec:
+      containers:
+        #This name is only for logging purposes
+        - name: auth
+          image: 10eggs/auth
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-srv
+#Not specified = ClusterIP by default
+spec:
+  #This is going to tell this service how to find the set of pods that is supposed to govern to (template/metadata/labels/)
+  selector:
+    app: auth
+  ports:
+    - name: auth
+      protocol: TCP
+      port: 3000
+      #As container(auth) is listening on 3000
+      targetPort: 3000
+
+
+
