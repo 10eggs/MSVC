@@ -5,4 +5,7 @@ $tsc --init
 
 
 #This time we are running Kubernetess stuff directly, straight after creation of new service
-
+warning: LF will be replaced by CRLF in ticketing/auth/package-lock.json.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in ticketing/auth/package.json.
+The file will have its original line endings in your working directory
