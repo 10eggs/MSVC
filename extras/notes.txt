@@ -261,6 +261,8 @@ $kubectl apply -f .
 kubectl delete svc comment-srv
 
 #Start with React application
+
+
 #LET's GO WITH LOAD BALANCER
 
 #LBS - tells Kubernetes to reach out to it's PROVIDER and PROVISION a load balancer. Gets traffic in to a single pod
@@ -270,3 +272,34 @@ kubectl delete svc comment-srv
  
 #Ingress - a pod with a set of routing rules to distribute traffic to other services. Ingress Controller is feed by config file
 #Need to trick our machine that posts.com = localhost. Whenever we want to access posts.com - we'll be always redirected to localhost
+
+
+
+#Routing rules for mcsv for cluster
+#Ingres engine module cannot do routing based upon the metod of request, so we need to specify when we'd like to use post/get/put/delete
+#Nginx doesnt support wildcard - need to use regular expressions
+#nginx.ingress.kubernetes.io/use-regex: 'true'
+
+#Path to add 127.0.0.1 posts.com
+#C:\Windows\System32\drivers\etc\hosts
+
+02/09/2022 14:00 - lesson 101
+#ATM making changes in our code is a real pain
+#Introducing Skaffold
+#Few examples of what Skaffold does for us:
+    - Automates many tasks in dev env,
+    - Makes it really easy to update code in a running pod
+    - Makes it really easy to create/delete all objects tied to a project at ONCE
+
+
+#skaffold.dev
+
+#We need to add another config file to tell scaffold how to manage all subprojects in our cluster
+#it's not applied to kubernetess - it is running outside of our cluster
+
+#To run skaffold
+$skaffold dev
+
+#To stop skaffold - ctrl+C
+
+

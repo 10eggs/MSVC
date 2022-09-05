@@ -9,7 +9,7 @@ const PostList = () => {
     const fetchPosts = async ()=>{
         //Answer from the call is stored inside 'data' property
         //without await console.log outside of fetchPosts scope shows 'undefined'
-        const res = await axios.get('http://localhost:4002/posts');
+        const res = await axios.get('http://posts.com/posts');
         console.log(res.data);
         setPosts(res.data);
     };

@@ -1,0 +1,64 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl:
+  #This is telling skaffold that there is a collection of different config files inteded for K8
+  #Whenever we stop skaffold to go work on another project, all the objects related to these will be deleted
+  #We end up with clean cluster 
+    manifests:
+      - ./infra/k8s/*
+build:
+  local:
+    push: false
+  #Artifact section is telling skaffold about something inside of our project
+  #that it needs to maintain
+  #Essentially - there is going to be some pod that is running code out of the client directory
+  artifacts:
+    - image: 10eggs/client
+      context: client/client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.js'
+            dest: .
+    - image: 10eggs/comments
+      context: comments
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
+    - image: 10eggs/event-bus
+      context: event-bus
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
+    - image: 10eggs/moderation
+      context: moderation
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
+    - image: 10eggs/posts
+      context: posts
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
+    - image: 10eggs/query
+      context: query
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
