@@ -302,4 +302,231 @@ $skaffold dev
 
 #To stop skaffold - ctrl+C
 
+map object to store all activities
 
+//Routing
+Outlet - router component
+Router outlet component is swapping outlet with required component
+Depends on route our component will be swapped
+
+//Reseting state with the key:
+https://beta.reactjs.org/learn/preserving-and-resetting-state#option-2-resetting-state-with-a-key
+
+For some cases we'd like to reset state of the component rather than preserving it.
+To do so we can use keys (same property as we are using for react lists)
+We need to add key to our router, as we are rendering same component for two different routes, we'd like to distinguish them by adding key property
+
+//Children saved in router are replaced in outlet
+//useLocation() - another react hook from react-router
+
+//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce
+
+//<> - fragment shortcut
+
+//ApiController attribute
+//400 if it encounters error
+
+//Exceptions are heavy object - we should try to avoid them where we can do it
+
+//FluentValidator nuget package
+//https://docs.fluentvalidation.net/en/latest/
+//We have two options - one is to validate every single domain model, second is to add validator to the pipeline (we are opt to second option)
+//ApplicationServiceExtensions have to have two extra registered middlewares:
+
+//AddFluentValidationAutoValidation();
+//AddValidatorsFromAssemblyContaining<Create>();
+
+//We need to specify class where we are going to perform our validation (our case ActivityValidator)
+//Inside Command class we are specifying that validator is against Command instance (not activity), and next we are assigning validator to the 
+//x.Activity property
+
+//In controller we are returning IActionResult now (instead of previous ActionResult)
+//IActionResult allow us to return http responses instead of type of thing
+
+//To handle exceptions we are introducing Result class in application/core/result
+//So our MediatR is now working with Result objects instead of Activities objects.
+
+//We may have validations against success/null inside ActivitiesController or to make it thiner we can extract it to the base controller
+//SaveChangesAsync in dbcontext return values. If nothing was written to the database then result will be 0, otherway positive integer.
+
+//For delete handler we are going to do additional check in base controller against null value;
+//Note for exceptions - in minimal API we don't need to use UseDeveloperExceptionPage() method as this is set by default.
+//That's why for every incorrect request we can see a detailed exception message in our postman.
+//In prod environment we'd like to disable this 
+
+//We want to handle exception no matter what environment is in Usage
+//To do that we'll introduce our own exception handling middleware
+
+//https://learn.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-7.0
+//Middleware layer is looking for InvokeAsync method, nothing else, that's why for custom middlewares we need to have our logic inside this method
+
+//The reason why we are putting contenttype in our middleware is that we are not in the context of controller (it sets content type to app/json automatically)
+
+
+//In axios everything what is coming from server with other resp status than 200 will be rejected on promise level
+
+// By using <code> tag we are just injecting html
+
+//TO CLEANUP DB:
+//1. From solution path:
+//-s flag = startup project, -p persistance   
+//2. dotnet ef database drop -s API -p Persistance
+
+
+//Introducing FORMIK
+//Formik provides render properties
+//Destructuring properties we are intrested to get from Formik by {({})}
+
+//ctrl+shift+l - select all words
+
+//Partial<className> making all properties optional
+
+//$npm ls date-fns - is listing installed packages with selected name
+//loadash - simplify javascript
+
+//When we want to do migration  - stop API proj
+//.AddEntityFrameworkStores<DataContext>(); <- this allow us to query user by EntityFramework
+
+//JWT - three ingredients
+//1. Header - alghoritm which was used to encrypt signature of the Token
+//2. Payload - What we are going to send back inside this token. We can add claims about the user
+//you may put it in clear text - did not put any confidential information inside the token
+
+// This free properties are incldued in TokenPayload (we are usually adding username as well). These three dates gives us information
+// about token
+//nbf - no before - when can this token start being use
+//exp - latest date this token up until
+//iat - issued at - similar to nbf
+
+//3. Signature - our server will sign token before it leaves the server
+//Server is going to use token key that stored on the server and never leaves the server
+//What we are using in JWT is encrypting signature (symetric security), same key for encrypting/decrypting
+// key is a very long string to sign our token with
+
+// Local storage - in client (browser) is the place where we are storying data like JWT token received from auth server
+// Local storage is persisten storage which means even when we turn off the browser our token will be there
+// Then auth token is sending with every request in a header Authentication. We are passing this token as a Bearer Token
+
+// Service - something that you creating that doesn't involve data access, there is no repository
+// we don't want to put this kind of logic directly inside controller - we'd like to keep it separate
+
+// IdentityServer - add SCOPED service - this token service will be scoped just to http request itself
+// This is a common scenario - when we are creating service by ourselves we typically use AddScoped - when http request is finished the service is disposed
+
+//Other method is AddTransient - service specifically created for the method
+//https://jwt.ms/
+
+//How to store secrets in ASP.NET Core app in dev model
+//https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-7.0&tabs=windows
+//Environment variables [x]
+//Secret manager
+//appsettings.json 
+// for 3rd party API keys I would use .net user secrets
+
+//Difference between ExtensionMethod class and other class - for first one we are not initializing our config inside class - we are just
+//using method parameters, however when we are going to use config in other class we need to initialize this field first.
+
+//We can use [Authorize] attribute above every controller method signature (every endpoint)
+//Or we can use Authorisation in Program class, to set all endpoints default in Services.AddController
+
+//IdentityServiceExtensions - need to apply something to detect email or user
+//In controller we are checking if username or email has been already taken. Password validation - we are leaving it for IdentityServer
+//For now blank email or username will be accepted by API. We need to make sure that this validate before we allow user to register.
+
+//We are using fluent validation in our project so far, but 
+//?=.*\\d any character, one of them needs to be digit
+
+
+//In get user we need to have an acceess to email token or email claim from our token
+//Inside our Controller context we've got an access to User object. 
+
+//User object - claim principal associated with User executing an action
+//
+
+//Allow annonymous take precedence before every other attribute ihen it is declared at the controller level
+//When we are adding store to our component we should instantly export it as an observer
+
+//We don't need to create loading indicator when we are using isSubmitting because forming is recognizing that we are using onSubmit,
+//and it is turning on/off isSubmitting when it receive a response from onSubmit
+
+//In formik, when you are surround <values> which are parameters of onSubmit method with parenthesis, then we can get some methods and properties
+//in parameters as well, we just need to use {}, i.e.
+// onSubmit ={(values, {methods,andProps, i.e. setErrors}) => userStore.login(values)}
+
+//When we are using setErrors in onSubmission, we also need to add additional property to our initial values form Formik component
+//initially errors are set to null
+
+//Mobx
+//Reaction -  we can react on observable changes in our store
+
+//1. Reaction - first param is about what are we going to react
+//2. Second - how to deal with this
+
+//For errors if we are using same values for key and value we can have a shortcut for it, e.g. {error:error} = {error}
+
+
+//We have this ability to do N:N table in EF out of the box.
+//All we need to do is add two ICollections<JoinedType> in both classes.
+
+//We are going to implement N:N by ourselves, to do that instead of ICollection<JoinedType> we'll use ICollection<JoinTableType> (ActivityAttendee rather than Activity or AppUser)
+
+//To add additional configuration to the entity framework we need to override OnModelCreating method from identitydbcontext
+
+//For ActivityAttendee table we'd like to have primary key which is combination of both - AppUser PK and Activity PK
+
+//dotnet ef migration add ActivityAttendee -p Persistance -s API
+//dotnet new classlib -n Infrastructure
+//dotnet sln add Infrastructure
+//dotnet add Reference Application
+
+//160 - Object reference not set to an instance of the object
+//To avoid it (in our case problem with N:N where N is not initialized as an empty array) we can just initialize new array
+//Loading related data
+//Eager,Lazy,Explicit
+
+//161. Object cycle dependend - infinitive loop of relationship between two entities
+//We can disable it or we can reshape our data
+
+//Reshape is done by introducing ActivityDto. In our MediatR handler we'd like to return ActivitiesDto set rather that Activities.
+//To be able to do that we need to introduce mapping layer by using AutoMapper
+
+//Automapper is returning empty arrays as it is not smart enough to recognize related properties if their names don't match.
+//For Member - destination member
+
+//It's worth to note that when we are selecting from our database we are including many unnecessary properties.
+//To avoid it instead of using eager loading we can use PROJECTION
+//Projection allow us to skip 'Include' part of the EF Core query
+
+//First or default vs SingleOrDefault
+//If one or more matches then SingleOrDefault throw exception, where FirstOrDefault returns null;
+
+//165. Adding a custom auth policy
+//Our ActivityAttendee primary key is made of combination of user & activity PK
+
+//We discovered a bug where hostUserName and attendees are cleaned-up after editing.
+//Interesting note is that our IsHostRequirementHandler has a transient lifecycle, and even if it is disposed (after http call)
+//the entity tracked by this handler (we are calling ef from handler) is not disposed at all (it is staying in memory).
+
+//FindAsync is always tracking an entity
+
+//FindAsync vs FirstOrDefaultAsync()
+
+//To be able to update seed data first we need to use ef tool to drop actual database and perform another migration
+
+//170. Adding attendance component
+F2 - VS Code to change many occurences
+
+//some() returns true if the callback function returns true for any element of the array
+
+//PROBLEM - Dto object properties have C# naming convention for Propertines, i.e. DisplayName, UserName.
+//DTO returned by controller, and props name was changed to js syntax, e.g. displayName, userName
+//Had to introduce another property to user interface in typescript
+
+
+//Update existing activityh with new values by using spread operator
+let updatedActivity = {...this.getActivity(activity.id), ...activity}
+...activity override exisitng props
+
+services.Configure - what it does?
+IFormFile - file which is transfeered by http request
+Crop image?
